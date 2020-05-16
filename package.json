@@ -1,0 +1,30 @@
+{
+  "name": "knockio_node_server",
+  "version": "0.1.0",
+  "description": "Web server for KnockIO.",
+  "main": "./src/app.js",
+  "scripts": {
+    "start": "node --experimental-json-modules --es-module-specifier-resolution=node --no-deprecation --no-warnings src/app.js"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RuHacks2020/Node-Server.git"
+  },
+  "author": "Team $$$",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RuHacks2020/Node-Server/issues"
+  },
+  "homepage": "https://github.com/RuHacks2020/Node-Server#readme",
+  "contributors": [
+    "Ahmad Beirkdar",
+    "Dominic Bonello",
+    "Erio Hoti",
+    "Alexander Mclain"
+  ],
+  "dependencies": {
+    "chalk": "^4.0.0",
+    "koa": "^2.11.0"
+  }
+}
