@@ -1,38 +1,50 @@
 import Koa from 'koa';
+import Router from '@koa/router';
+import Cors from '@koa/cors';
 
 import config from '../configs.json';
 import { server } from './library/logger';
 
+import database from './database/database';
+import settings from './database/collections/settings';
+
+import RouterService from './routes/router';
+
 class KnockService {
-    constructor() {
-        server("Initializing KnockService...");
-        this.app = new Koa();
+  constructor() {
+    server("Initializing KnockService...");
+    this.app = new Koa();
+    this.router = new Router();
+    this.routerService = new RouterService();
 
-        this.start();
-    }
+    this.start();
+  }
 
-    start() {
-        this.setupDatabase().then(() => {
-            this.setupRoutes().then(() => {
-                server('test');
-                this.app.listen(config.server.port).then(() => {
-                    server(`KnockIO Web Server started on port ${config.server.port}.`);
-                });
-            });
-        })
-    }
+  start() {
+    this.setupDatabase().then(() => {
+      this.routerService.init().then(() => {
+        this.router.use('*', this.routerService.router.routes(), this.routerService.router.allowedMethods());
 
-    setupDatabase() {
-        return new Promise(resolve => {
-            resolve();
-        });
-    }
+        this.app
+          .use(Cors())
+          .use(this.router.routes())
+          .use(this.router.allowedMethods())
+          .listen(config.server.port, () => {
+            server(`KnockIO Web Server started on port ${config.server.port}.`);
+          });
+      });
+    })
+  }
 
-    setupRoutes() {
-        return new Promise(resolve => {
-            resolve();
-        });
-    }
+  setupDatabase() {
+    return new Promise(resolve => {
+      database().then(() => {
+        settings();
+
+        resolve();
+      })
+    });
+  }
 }
 
 new KnockService();

@@ -1,5 +1,9 @@
 {
-    "server": {
-        "port": 80
-    }
+  "server": {
+    "port": 80
+  },
+  "database": {
+    "url": "mongodb://knockUser:X6SLA4AV3tNsegrw@chicago:25015/?authSource=knockio&readPreference=primary&ssl=false",
+    "db_name": "knockio"
+  }
 }
