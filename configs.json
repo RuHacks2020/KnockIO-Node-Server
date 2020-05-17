@@ -1,6 +1,7 @@
 {
   "server": {
-    "port": 80
+    "port": 80,
+    "esp_port": 1888
   },
   "database": {
     "url": "mongodb://knockUser:X6SLA4AV3tNsegrw@chicago:25015/?authSource=knockio&readPreference=primary&ssl=false",

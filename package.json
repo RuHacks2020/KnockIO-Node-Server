@@ -26,9 +26,22 @@
   "dependencies": {
     "@koa/cors": "^3.0.0",
     "@koa/router": "^8.0.8",
+    "@tensorflow/tfjs": "^1.7.4",
+    "@tensorflow/tfjs-node": "^1.7.4",
+    "axios": "^0.19.2",
+    "canvas": "^2.6.1",
     "chalk": "^4.0.0",
+    "cron": "^1.8.2",
     "esm": "^3.2.25",
+    "evilscan": "^1.7.5",
+    "face-api.js": "^0.22.2",
+    "file-on-write": "^1.1.1",
+    "ip": "^1.1.5",
+    "json-loader": "^0.5.7",
     "koa": "^2.11.0",
-    "mongodb": "^3.5.7"
+    "mjpeg-consumer": "^2.0.0",
+    "mongodb": "^3.5.7",
+    "node-fetch": "^2.6.0",
+    "request": "^2.88.2"
   }
 }

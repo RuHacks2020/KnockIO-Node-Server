@@ -4,6 +4,7 @@ import Cors from '@koa/cors';
 
 import config from '../configs.json';
 import { server } from './library/logger';
+import ESP from './services/ESP';
 
 import database from './database/database';
 import settings from './database/collections/settings';
@@ -16,23 +17,26 @@ class KnockService {
     this.app = new Koa();
     this.router = new Router();
     this.routerService = new RouterService();
+    this.esp = ESP();
 
     this.start();
   }
 
   start() {
-    this.setupDatabase().then(() => {
-      this.routerService.init().then(() => {
-        this.router.use('*', this.routerService.router.routes(), this.routerService.router.allowedMethods());
+    this.esp.then(() => {
+      this.setupDatabase().then(() => {
+        this.routerService.init().then(() => {
+          this.router.use('*', this.routerService.router.routes(), this.routerService.router.allowedMethods());
 
-        this.app
-          .use(Cors())
-          .use(this.router.routes())
-          .use(this.router.allowedMethods())
-          .listen(config.server.port, () => {
-            server(`KnockIO Web Server started on port ${config.server.port}.`);
-          });
-      });
+          this.app
+            .use(Cors())
+            .use(this.router.routes())
+            .use(this.router.allowedMethods())
+            .listen(config.server.port, () => {
+              server(`KnockIO Web Server started on port ${config.server.port}.`);
+            });
+        });
+      })
     })
   }
 
