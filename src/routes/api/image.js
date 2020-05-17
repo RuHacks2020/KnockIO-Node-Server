@@ -1,4 +1,5 @@
 import Router from '@koa/router';
+import send from 'koa-send';
 
 export default class {
   constructor() {
@@ -10,7 +11,7 @@ export default class {
   init() {
     this.router
       .get('/', async (ctx, next) => {
-        ctx.body = "Hi!";
+        await send(ctx, 'esp.jpg')
         await next();
       });
   }

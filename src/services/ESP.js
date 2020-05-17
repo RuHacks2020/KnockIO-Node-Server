@@ -1,13 +1,13 @@
 import evilScan from 'evilscan';
-import ip from 'ip';
-import {server, error} from '../library/logger';
-import FaceRecognition from './FaceRecognition';
-import config from '../../configs.json';
 import request from 'request';
 import MjpegConsumer from 'mjpeg-consumer';
 import FileOnWrite from 'file-on-write';
+
+import {server, error, warn} from '../library/logger';
+
+import config from '../../configs.json';
 import fs from 'fs';
-import Cron from 'cron';
+import ip from 'ip';
 
 let ESP = null;
 
@@ -55,22 +55,20 @@ class ESPService {
     });
   }
 
-  async downloadImg() {
-    const currentImg = fs.createWriteStream("img.png");
-    const consumer = new MjpegConsumer();
-    const img = request(this.esp).pipe(consumer).pipe(currentImg);
-    const faceImg = await FaceRecognition().recognizeFace("img.png");
-  }
+  getImage() {
+    try {
+      const fileWriter = new FileOnWrite({
+        ext: '.jpg',
+        filename: () => {
+          return 'esp';
+        },
+      });
+      const consumer = new MjpegConsumer();
 
-  async getImage() {
-    await this.downloadImg();
+      request(this.esp).pipe(consumer).pipe(fileWriter);
+    } catch (e) { }
   }
-
 }
-
-const job = new Cron.CronJob('*/5 * * * * *', async () => {
-  await ESP.getImage();
-});
 
 export default () => {
   if (ESP == null) {
@@ -80,10 +78,8 @@ export default () => {
       ESP = new ESPService();
 
       ESP.init().then(() => {
-        FaceRecognition().then(() => {
-          job.start();
-          resolve();
-        })
+        ESP.getImage();
+        resolve();
       }).catch(() => {
         error('Unable to find ESP32 on local network! ' +
           'Ensure that the ESP32 is running the correct software and is running!');
