@@ -42,11 +42,15 @@ class KnockService {
 
   setupDatabase() {
     return new Promise(resolve => {
-      database().then(() => {
-        settings();
+      if (config.database.enabled) {
+        database().then(() => {
+          settings();
 
+          resolve();
+        })
+      } else {
         resolve();
-      })
+      }
     });
   }
 }
